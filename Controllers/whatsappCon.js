@@ -515,18 +515,18 @@ export async function sendText(to, message) {
       },
     }
   );
-}
+// }
 
-export async function sendText(to, message) {
-  // ✅ LOCALHOST / DEV → MOCK
-  if (process.env.NODE_ENV !== "production") {
-    console.log("📩 [MOCK SEND]");
-    console.log("To:", to);
-    console.log("Message:", message);
-    console.log("🔥 POST WEBHOOK HIT");
+// export async function sendText(to, message) {
+//   // ✅ LOCALHOST / DEV → MOCK
+//   if (process.env.NODE_ENV !== "production") {
+//     console.log("📩 [MOCK SEND]");
+//     console.log("To:", to);
+//     console.log("Message:", message);
+//     console.log("🔥 POST WEBHOOK HIT");
 
-    return;
-  }
+//     return;
+//   }
 
   // ✅ PRODUCTION → REAL WHATSAPP API
   await axios.post(
