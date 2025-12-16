@@ -92,10 +92,58 @@ export const verifyWebhook = (req, res) => {
   return res.sendStatus(403);
 };
 
-export const receiveWebhook = async (req, res) => {
-  const msg = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-console.log("🔥 POST WEBHOOK HIT");
+// export const receiveWebhook = async (req, res) => {
+//   const msg = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+// console.log("🔥 POST WEBHOOK HIT");
 
+//   if (!msg) return res.sendStatus(200);
+
+//   const from = msg.from;
+
+//   if (msg.type === "text") {
+//     await handleUserMessage(from, msg.text.body);
+//   }
+
+//   else if (msg.type === "interactive") {
+
+//     if (msg.interactive.type === "list_reply") {
+//       const title = msg.interactive.list_reply.title;
+//       await handleButtonClick(from, title);
+//     }
+
+//     if (msg.interactive.type === "button_reply") {
+//       const id = msg.interactive.button_reply.id;
+//       await handleButtonClick(from, id);
+//     }
+//   }
+
+//   else if (msg.type === "location") {
+
+//     if (!userSessions[from]) {
+//       userSessions[from] = { step: 7, data: {} };
+//     }
+
+//     userSessions[from].data.location = msg.location;
+//     await handleFormFlow(from, "__LOCATION_RECEIVED__");
+//   }
+
+//   return res.sendStatus(200);
+// };
+import {
+  handleUserMessage,
+  handleButtonClick,
+  handleFormFlow,
+  userSessions
+} from "./whatsappCon.js";
+
+export const receiveWebhook = async (req, res) => {
+  console.log("🔥 POST WEBHOOK HIT");
+
+  if (!req.body || !req.body.entry) {
+    return res.sendStatus(200);
+  }
+
+  const msg = req.body.entry[0]?.changes?.[0]?.value?.messages?.[0];
   if (!msg) return res.sendStatus(200);
 
   const from = msg.from;
