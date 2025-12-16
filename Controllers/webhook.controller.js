@@ -94,6 +94,7 @@ export const verifyWebhook = (req, res) => {
 
 export const receiveWebhook = async (req, res) => {
   const msg = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+console.log("🔥 POST WEBHOOK HIT");
 
   if (!msg) return res.sendStatus(200);
 
