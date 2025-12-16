@@ -782,22 +782,44 @@ const { ACCESS_TOKEN, PHONE_NUMBER_ID, API_BASE_URL } = process.env;
 export const userSessions = {};
 
 // ================= SEND TEXT =================
+// export async function sendText(to, message) {
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "text",
+//       text: { body: message },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
 export async function sendText(to, message) {
-  await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
-    {
-      messaging_product: "whatsapp",
-      to,
-      type: "text",
-      text: { body: message },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+      {
+        messaging_product: "whatsapp",
+        to,
+        type: "text",
+        text: { body: message },
       },
-    }
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (err) {
+    console.error("❌ WhatsApp send error:");
+    console.error(err.response?.data || err.message);
+  }
 }
 
 // ================= INTRO =================
