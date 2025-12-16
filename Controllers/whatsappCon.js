@@ -498,24 +498,24 @@ const { ACCESS_TOKEN, PHONE_NUMBER_ID, API_BASE_URL } = process.env;
 
 export const userSessions = {};
 
-// ================= SEND TEXT =================
-// export async function sendText(to, message) {
-//   await axios.post(
-//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
-//     {
-//       messaging_product: "whatsapp",
-//       to,
-//       type: "text",
-//       text: { body: message },
-//     },
-//     {
-//       headers: {
-//         Authorization: `Bearer ${ACCESS_TOKEN}`,
-//         "Content-Type": "application/json",
-//       },
-//     }
-//   );
-// }
+//================= SEND TEXT =================
+export async function sendText(to, message) {
+  await axios.post(
+    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+    {
+      messaging_product: "whatsapp",
+      to,
+      type: "text",
+      text: { body: message },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+}
 
 export async function sendText(to, message) {
   // ✅ LOCALHOST / DEV → MOCK
@@ -523,6 +523,8 @@ export async function sendText(to, message) {
     console.log("📩 [MOCK SEND]");
     console.log("To:", to);
     console.log("Message:", message);
+    console.log("🔥 POST WEBHOOK HIT");
+
     return;
   }
 
