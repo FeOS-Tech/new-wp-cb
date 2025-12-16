@@ -487,6 +487,289 @@
 //   }
 // };
 
+// import { SrBooking } from "../models/srBooking.js";
+// import axios from "axios";
+// import dotenv from "dotenv";
+// import dayjs from "dayjs";
+
+// dotenv.config();
+
+// const { ACCESS_TOKEN, PHONE_NUMBER_ID, API_BASE_URL } = process.env;
+
+// export const userSessions = {};
+
+// //================= SEND TEXT =================
+// export async function sendText(to, message) {
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "text",
+//       text: { body: message },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// // }
+
+// // export async function sendText(to, message) {
+// //   // ✅ LOCALHOST / DEV → MOCK
+// //   if (process.env.NODE_ENV !== "production") {
+// //     console.log("📩 [MOCK SEND]");
+// //     console.log("To:", to);
+// //     console.log("Message:", message);
+// //     console.log("🔥 POST WEBHOOK HIT");
+
+// //     return;
+// //   }
+
+//   // ✅ PRODUCTION → REAL WHATSAPP API
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "text",
+//       text: { body: message },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+
+
+// // ================= INTRO =================
+// export async function sendIntro(to) {
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "template",
+//       template: {
+//         name: "service_intro",
+//         language: { code: "en_US" },
+//       },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+
+// // ================= USER MESSAGE =================
+// export async function handleUserMessage(userNumber, message) {
+//   message = message.trim();
+
+//   if (/^(hi|hello)$/i.test(message)) {
+//     userSessions[userNumber] = { step: 1, data: {} };
+//     await sendText(userNumber, "Hi there! Thanks for contacting our Service Center.");
+//     await sendText(userNumber, "Let's get your booking started!");
+//     await sendText(userNumber, "What’s your full name?");
+//     return;
+//   }
+
+//   if (userSessions[userNumber]) {
+//     await handleFormFlow(userNumber, message);
+//     return;
+//   }
+
+//   await sendText(userNumber, "Please type *hi* to start booking your service.");
+// }
+
+// // ================= BRAND LIST =================
+// export async function sendBrandList(to) {
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "interactive",
+//       interactive: {
+//         type: "list",
+//         body: { text: "Please choose your brand name:" },
+//         action: {
+//           button: "Choose Brand",
+//           sections: [
+//             {
+//               title: "Available Brands",
+//               rows: [
+//                 { id: "machcity", title: "Mach City" },
+//                 { id: "bsa", title: "BSA" },
+//                 { id: "hercules", title: "Hercules" },
+//                 { id: "brand_montra", title: "Montra" },
+//               ],
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+
+// // ================= ISSUE TYPES =================
+// export async function sendIssueTypes(to) {
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "interactive",
+//       interactive: {
+//         type: "list",
+//         body: { text: "Select your issue type:" },
+//         action: {
+//           button: "Choose Issue Type",
+//           sections: [
+//             {
+//               title: "Type of Issues",
+//               rows: [
+//                 { id: "frame", title: "Frame" },
+//                 { id: "rim", title: "Rim" },
+//                 { id: "tyre", title: "Tyre" },
+//               ],
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+
+// // ================= SLOT LIST =================
+// export async function sendSlotList(to) {
+//   const formattedDate = dayjs().add(2, "day").format("DD MMM");
+
+//   await axios.post(
+//     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//     {
+//       messaging_product: "whatsapp",
+//       to,
+//       type: "interactive",
+//       interactive: {
+//         type: "list",
+//         body: { text: `Please choose your slot for ${formattedDate}` },
+//         action: {
+//           button: "Choose Slots",
+//           sections: [
+//             {
+//               title: "Available Slots",
+//               rows: [
+//                 { id: "slot_1", title: `${formattedDate} - 10 AM to 11 AM` },
+//                 { id: "slot_2", title: `${formattedDate} - 11 AM to 12 PM` },
+//                 { id: "slot_3", title: `${formattedDate} - 02 PM to 03 PM` },
+//                 { id: "slot_4", title: `${formattedDate} - 04 PM to 05 PM` },
+//               ],
+//             },
+//           ],
+//         },
+//       },
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${ACCESS_TOKEN}`,
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// }
+
+// // ================= BUTTON / LIST CLICK =================
+// export async function handleButtonClick(userNumber, id) {
+//   const session = userSessions[userNumber];
+//   if (!session) return;
+
+//   if (session.step === 3) {
+//     session.data.brandName = id;
+//     session.step = 4;
+//     await sendText(userNumber, "What’s your *model name*?");
+//   } else if (session.step === 5) {
+//     session.data.issueType = id;
+//     session.step = 6;
+//     await sendSlotList(userNumber);
+//   } else if (session.step === 6) {
+//     session.data.slot = id;
+//     session.step = 7;
+//     await sendText(userNumber, "Please share your *location pin* 📍");
+//   }
+// }
+
+// // ================= FORM FLOW =================
+// export async function handleFormFlow(userNumber, userResponse) {
+//   const session = userSessions[userNumber];
+//   if (!session) return;
+
+//   switch (session.step) {
+//     case 1:
+//       session.data.name = userResponse;
+//       session.step = 2;
+//       await sendText(userNumber, "Please share your *email address*.");
+//       break;
+
+//     case 2:
+//       session.data.email = userResponse;
+//       session.step = 3;
+//       await sendBrandList(userNumber);
+//       break;
+
+//     case 4:
+//       session.data.modelName = userResponse;
+//       session.step = 5;
+//       await sendIssueTypes(userNumber);
+//       break;
+
+//     case 7:
+//       if (userResponse === "__LOCATION_RECEIVED__") {
+//         session.step = 8;
+//         await sendText(
+//           userNumber,
+//           `Here’s your booking summary:\n\nName: ${session.data.name}\nEmail: ${session.data.email}\nBrand: ${session.data.brandName}\nModel: ${session.data.modelName}\nIssue: ${session.data.issueType}\nSlot: ${session.data.slot}\n\nReply *confirm* or *cancel*.`
+//         );
+//       }
+//       break;
+
+//     case 8:
+//       if (/^confirm$/i.test(userResponse)) {
+//         await axios.post(`${API_BASE_URL}/service-requests`, {
+//           ...session.data,
+//           userNumber,
+//         });
+//         await sendText(userNumber, "Your booking has been submitted successfully!");
+//         delete userSessions[userNumber];
+//       }
+//       break;
+//   }
+// }
+
+// // ================= SAVE TO DB =================
+// export const serviceRequests = async (req, res) => {
+//   const booking = await SrBooking.create(req.body);
+//   res.status(201).json({ success: true, booking });
+// };
 import { SrBooking } from "../models/srBooking.js";
 import axios from "axios";
 import dotenv from "dotenv";
@@ -498,7 +781,7 @@ const { ACCESS_TOKEN, PHONE_NUMBER_ID, API_BASE_URL } = process.env;
 
 export const userSessions = {};
 
-//================= SEND TEXT =================
+// ================= SEND TEXT =================
 export async function sendText(to, message) {
   await axios.post(
     `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
@@ -515,37 +798,7 @@ export async function sendText(to, message) {
       },
     }
   );
-// }
-
-// export async function sendText(to, message) {
-//   // ✅ LOCALHOST / DEV → MOCK
-//   if (process.env.NODE_ENV !== "production") {
-//     console.log("📩 [MOCK SEND]");
-//     console.log("To:", to);
-//     console.log("Message:", message);
-//     console.log("🔥 POST WEBHOOK HIT");
-
-//     return;
-//   }
-
-  // ✅ PRODUCTION → REAL WHATSAPP API
-  await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
-    {
-      messaging_product: "whatsapp",
-      to,
-      type: "text",
-      text: { body: message },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
 }
-
 
 // ================= INTRO =================
 export async function sendIntro(to) {
@@ -575,6 +828,7 @@ export async function handleUserMessage(userNumber, message) {
 
   if (/^(hi|hello)$/i.test(message)) {
     userSessions[userNumber] = { step: 1, data: {} };
+
     await sendText(userNumber, "Hi there! Thanks for contacting our Service Center.");
     await sendText(userNumber, "Let's get your booking started!");
     await sendText(userNumber, "What’s your full name?");
@@ -698,21 +952,22 @@ export async function sendSlotList(to) {
   );
 }
 
-// ================= BUTTON / LIST CLICK =================
-export async function handleButtonClick(userNumber, id) {
+// ================= LIST / BUTTON CLICK =================
+// ✅ NOW STORES TITLE (USER FRIENDLY)
+export async function handleButtonClick(userNumber, title) {
   const session = userSessions[userNumber];
   if (!session) return;
 
   if (session.step === 3) {
-    session.data.brandName = id;
+    session.data.brandName = title;
     session.step = 4;
     await sendText(userNumber, "What’s your *model name*?");
   } else if (session.step === 5) {
-    session.data.issueType = id;
+    session.data.issueType = title;
     session.step = 6;
     await sendSlotList(userNumber);
   } else if (session.step === 6) {
-    session.data.slot = id;
+    session.data.slot = title;
     session.step = 7;
     await sendText(userNumber, "Please share your *location pin* 📍");
   }
@@ -747,7 +1002,14 @@ export async function handleFormFlow(userNumber, userResponse) {
         session.step = 8;
         await sendText(
           userNumber,
-          `Here’s your booking summary:\n\nName: ${session.data.name}\nEmail: ${session.data.email}\nBrand: ${session.data.brandName}\nModel: ${session.data.modelName}\nIssue: ${session.data.issueType}\nSlot: ${session.data.slot}\n\nReply *confirm* or *cancel*.`
+          `Here’s your booking summary:\n\n` +
+          `Name: ${session.data.name}\n` +
+          `Email: ${session.data.email}\n` +
+          `Brand: ${session.data.brandName}\n` +
+          `Model: ${session.data.modelName}\n` +
+          `Issue: ${session.data.issueType}\n` +
+          `Slot: ${session.data.slot}\n\n` +
+          `Reply *confirm* or *cancel*.`
         );
       }
       break;
@@ -758,6 +1020,7 @@ export async function handleFormFlow(userNumber, userResponse) {
           ...session.data,
           userNumber,
         });
+
         await sendText(userNumber, "Your booking has been submitted successfully!");
         delete userSessions[userNumber];
       }
