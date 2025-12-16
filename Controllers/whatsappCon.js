@@ -487,7 +487,7 @@
 //   }
 // };
 
-import { SrBooking } from "../models/SrBooking.js";
+import { SrBooking } from "../models/srBooking";
 import axios from "axios";
 import dotenv from "dotenv";
 import dayjs from "dayjs";
