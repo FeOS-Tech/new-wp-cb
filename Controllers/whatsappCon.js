@@ -821,16 +821,47 @@ export const userSessions = {};
 //     console.error(err.response?.data || err.message);
 //   }
 // }
-const lastSent = {};
+// const lastSent = {};
 
+// export async function sendText(to, message) {
+//    if (lastSent[to] === message) {
+//     console.log("⚠️ Duplicate message blocked:", message);
+//     return;
+//   }
+
+//   lastSent[to] = message;
+
+//   try {
+//     const res = await axios.post(
+//       `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//       {
+//         messaging_product: "whatsapp",
+//         to,
+//         type: "text",
+//         text: { body: message },
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${ACCESS_TOKEN}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     console.log("✅ WhatsApp message sent:", {
+//       to,
+//       message,
+//       messageId: res.data?.messages?.[0]?.id,
+//     });
+//   } catch (err) {
+//     console.error("❌ WhatsApp send error:", {
+//       to,
+//       message,
+//       error: err.response?.data || err.message,
+//     });
+//   }
+// }
 export async function sendText(to, message) {
-   if (lastSent[to] === message) {
-    console.log("⚠️ Duplicate message blocked:", message);
-    return;
-  }
-
-  lastSent[to] = message;
-
   try {
     const res = await axios.post(
       `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
@@ -853,6 +884,7 @@ export async function sendText(to, message) {
       message,
       messageId: res.data?.messages?.[0]?.id,
     });
+
   } catch (err) {
     console.error("❌ WhatsApp send error:", {
       to,
@@ -860,6 +892,19 @@ export async function sendText(to, message) {
       error: err.response?.data || err.message,
     });
   }
+}
+
+const processedMsgIds = new Set();
+
+export async function receiveWebhook(req, res) {
+  const msgId = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.id;
+
+  if (processedMsgIds.has(msgId)) {
+    console.log("⚠️ Duplicate inbound message ignored:", msgId);
+    return res.sendStatus(200);
+  }
+
+  processedMsgIds.add(msgId);
 }
 
 

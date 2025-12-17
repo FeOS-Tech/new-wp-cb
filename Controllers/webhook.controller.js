@@ -241,24 +241,86 @@ export const verifyWebhook = (req, res) => {
 
 /**
  * RECEIVE WEBHOOK (POST)
- */
-export const receiveWebhook = async (req, res) => {
-  // 🔥 THIS LOG MUST ALWAYS PRINT
-  console.log("🔥🔥🔥 WEBHOOK POST HIT 🔥🔥🔥");
-   console.log("🚨🚨🚨 WHATSAPP HIT MY SERVER 🚨🚨🚨");
-  console.log("RAW BODY:", JSON.stringify(req.body, null, 2));
+//  */
+// export const receiveWebhook = async (req, res) => {
+//   // 🔥 THIS LOG MUST ALWAYS PRINT
+//   console.log("🔥🔥🔥 WEBHOOK POST HIT 🔥🔥🔥");
+//    console.log("🚨🚨🚨 WHATSAPP HIT MY SERVER 🚨🚨🚨");
+//   console.log("RAW BODY:", JSON.stringify(req.body, null, 2));
 
-  // 🔍 log full body
-  console.log("BODY RECEIVED:", JSON.stringify(req.body, null, 2));
+//   // 🔍 log full body
+//   console.log("BODY RECEIVED:", JSON.stringify(req.body, null, 2));
+
+//   try {
+//     const msg =
+//       req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+
+//     if (!msg) {
+//       console.log("⚠️ NO MESSAGE OBJECT FOUND");
+//       return res.sendStatus(200);
+//     }
+
+//     console.log("✅ MESSAGE OBJECT:", msg);
+
+//     const from = msg.from;
+//     console.log("📞 FROM:", from);
+//     console.log("📨 TYPE:", msg.type);
+
+//     if (msg.type === "text") {
+//       console.log("📝 TEXT MESSAGE:", msg.text.body);
+//       await handleUserMessage(from, msg.text.body);
+//     }
+
+//     else if (msg.type === "interactive") {
+//       console.log("🧩 INTERACTIVE MESSAGE:", msg.interactive);
+
+//       const id =
+//         msg.interactive.list_reply?.title ||
+//         msg.interactive.button_reply?.id;
+
+//       console.log("🆔 INTERACTION ID:", id);
+//       await handleButtonClick(from, id);
+//     }
+
+//     else if (msg.type === "location") {
+//       console.log("📍 LOCATION RECEIVED:", msg.location);
+
+//       if (!userSessions[from]) {
+//         userSessions[from] = { step: 7, data: {} };
+//       }
+
+//       userSessions[from].data.location = msg.location;
+//       await handleFormFlow(from, "__LOCATION_RECEIVED__");
+//     }
+
+//     return res.sendStatus(200);
+//   } catch (error) {
+//     console.error("❌ ERROR IN WEBHOOK:", error);
+//     return res.sendStatus(500);
+//   }
+// };
+export const receiveWebhook = async (req, res) => {
+  console.log("🚨🚨 WHATSAPP WEBHOOK HIT 🚨🚨");
+  console.log(JSON.stringify(req.body, null, 2));
 
   try {
-    const msg =
-      req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const entry = req.body?.entry?.[0];
+    const change = entry?.changes?.[0];
+    const value = change?.value;
 
-    if (!msg) {
-      console.log("⚠️ NO MESSAGE OBJECT FOUND");
+    if (!value) {
+      console.log("⚠️ No value object");
       return res.sendStatus(200);
     }
+
+    const messages = value.messages;
+
+    if (!messages || !messages.length) {
+      console.log("ℹ️ No messages array (status / delivery event)");
+      return res.sendStatus(200);
+    }
+
+    const msg = messages[0];
 
     console.log("✅ MESSAGE OBJECT:", msg);
 
@@ -267,23 +329,21 @@ export const receiveWebhook = async (req, res) => {
     console.log("📨 TYPE:", msg.type);
 
     if (msg.type === "text") {
-      console.log("📝 TEXT MESSAGE:", msg.text.body);
+      console.log("📝 TEXT:", msg.text.body);
       await handleUserMessage(from, msg.text.body);
     }
 
     else if (msg.type === "interactive") {
-      console.log("🧩 INTERACTIVE MESSAGE:", msg.interactive);
+      const reply =
+        msg.interactive?.list_reply?.title ||
+        msg.interactive?.button_reply?.title;
 
-      const id =
-        msg.interactive.list_reply?.title ||
-        msg.interactive.button_reply?.id;
-
-      console.log("🆔 INTERACTION ID:", id);
-      await handleButtonClick(from, id);
+      console.log("🧩 INTERACTIVE:", reply);
+      await handleButtonClick(from, reply);
     }
 
     else if (msg.type === "location") {
-      console.log("📍 LOCATION RECEIVED:", msg.location);
+      console.log("📍 LOCATION:", msg.location);
 
       if (!userSessions[from]) {
         userSessions[from] = { step: 7, data: {} };
@@ -293,9 +353,9 @@ export const receiveWebhook = async (req, res) => {
       await handleFormFlow(from, "__LOCATION_RECEIVED__");
     }
 
-    return res.sendStatus(200);
-  } catch (error) {
-    console.error("❌ ERROR IN WEBHOOK:", error);
-    return res.sendStatus(500);
+  } catch (err) {
+    console.error("🔥 WEBHOOK ERROR:", err);
   }
+
+  return res.sendStatus(200);
 };
