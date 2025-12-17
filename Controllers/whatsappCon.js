@@ -861,6 +861,39 @@ export const userSessions = {};
 //     });
 //   }
 // }
+
+// export async function sendText(to, message) {
+//   try {
+//     const res = await axios.post(
+//       `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//       {
+//         messaging_product: "whatsapp",
+//         to,
+//         type: "text",
+//         text: { body: message },
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${ACCESS_TOKEN}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     console.log("✅ WhatsApp message sent:", {
+//       to,
+//       message,
+//       messageId: res.data?.messages?.[0]?.id,
+//     });
+
+//   } catch (err) {
+//     console.error("❌ WhatsApp send error:", {
+//       to,
+//       message,
+//       error: err.response?.data || err.message,
+//     });
+//   }
+// }
 export async function sendText(to, message) {
   try {
     const res = await axios.post(
@@ -879,20 +912,12 @@ export async function sendText(to, message) {
       }
     );
 
-    console.log("✅ WhatsApp message sent:", {
-      to,
-      message,
-      messageId: res.data?.messages?.[0]?.id,
-    });
-
+    console.log("✅ SENT:", message);
   } catch (err) {
-    console.error("❌ WhatsApp send error:", {
-      to,
-      message,
-      error: err.response?.data || err.message,
-    });
+    console.error("❌ SEND ERROR:", err.response?.data || err.message);
   }
 }
+
 
 const processedMsgIds = new Set();
 
