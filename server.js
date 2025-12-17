@@ -14,6 +14,11 @@ app.use(cors());
 app.use(bodyParser.json());
 
 connectDB();
+app.use((req, res, next) => {
+  console.log("🌍 INCOMING REQUEST:", req.method, req.url);
+  next();
+});
+
 
 app.use("/webhook", webhookRoutes);
 app.use("/", serviceRoutes);
