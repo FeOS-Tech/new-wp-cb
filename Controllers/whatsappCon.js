@@ -896,8 +896,9 @@ export const userSessions = {};
 // }
 export async function sendText(to, message) {
   try {
+    console.log("message sent #######")
     const res = await axios.post(
-      `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+      `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
       {
         messaging_product: "whatsapp",
         to,
@@ -936,7 +937,7 @@ export async function receiveWebhook(req, res) {
 // ================= INTRO =================
 export async function sendIntro(to) {
   await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+    `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
     {
       messaging_product: "whatsapp",
       to,
@@ -979,7 +980,7 @@ export async function handleUserMessage(userNumber, message) {
 // ================= BRAND LIST =================
 export async function sendBrandList(to) {
   await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+    `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
     {
       messaging_product: "whatsapp",
       to,
@@ -1015,7 +1016,7 @@ export async function sendBrandList(to) {
 // ================= ISSUE TYPES =================
 export async function sendIssueTypes(to) {
   await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+    `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
     {
       messaging_product: "whatsapp",
       to,
@@ -1052,7 +1053,7 @@ export async function sendSlotList(to) {
   const formattedDate = dayjs().add(2, "day").format("DD MMM");
 
   await axios.post(
-    `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+    `https://graph.facebook.com/v22.0/${PHONE_NUMBER_ID}/messages`,
     {
       messaging_product: "whatsapp",
       to,

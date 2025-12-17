@@ -28,8 +28,9 @@ export const verifyWebhook = (req, res) => {
  * RECEIVE WHATSAPP MESSAGES (POST)
  */
 export const receiveWebhook = async (req, res) => {
-  console.log("🚨🚨🚨 WHATSAPP WEBHOOK HIT 🚨🚨🚨");
-  console.log(JSON.stringify(req.body, null, 2));
+  console.log("🚨🚨🚨 WHATSAPP WEBHOOK HIT 🚨🚨🚨", new Date().toISOString());
+  console.log('Body',JSON.stringify(req.body, null, 2));
+  console.log('Headers', req.headers);
 
   try {
     const entry = req.body?.entry?.[0];
