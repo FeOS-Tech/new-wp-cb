@@ -799,9 +799,40 @@ export const userSessions = {};
 //     }
 //   );
 // }
+// export async function sendText(to, message) {
+//   try {
+//     await axios.post(
+//       `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
+//       {
+//         messaging_product: "whatsapp",
+//         to,
+//         type: "text",
+//         text: { body: message },
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${ACCESS_TOKEN}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//   } catch (err) {
+//     console.error("❌ WhatsApp send error:");
+//     console.error(err.response?.data || err.message);
+//   }
+// }
+const lastSent = {};
+
 export async function sendText(to, message) {
+   if (lastSent[to] === message) {
+    console.log("⚠️ Duplicate message blocked:", message);
+    return;
+  }
+
+  lastSent[to] = message;
+
   try {
-    await axios.post(
+    const res = await axios.post(
       `https://graph.facebook.com/v17.0/${PHONE_NUMBER_ID}/messages`,
       {
         messaging_product: "whatsapp",
@@ -816,11 +847,21 @@ export async function sendText(to, message) {
         },
       }
     );
+
+    console.log("✅ WhatsApp message sent:", {
+      to,
+      message,
+      messageId: res.data?.messages?.[0]?.id,
+    });
   } catch (err) {
-    console.error("❌ WhatsApp send error:");
-    console.error(err.response?.data || err.message);
+    console.error("❌ WhatsApp send error:", {
+      to,
+      message,
+      error: err.response?.data || err.message,
+    });
   }
 }
+
 
 // ================= INTRO =================
 export async function sendIntro(to) {

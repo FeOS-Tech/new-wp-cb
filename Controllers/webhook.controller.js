@@ -245,6 +245,8 @@ export const verifyWebhook = (req, res) => {
 export const receiveWebhook = async (req, res) => {
   // 🔥 THIS LOG MUST ALWAYS PRINT
   console.log("🔥🔥🔥 WEBHOOK POST HIT 🔥🔥🔥");
+   console.log("🚨🚨🚨 WHATSAPP HIT MY SERVER 🚨🚨🚨");
+  console.log("RAW BODY:", JSON.stringify(req.body, null, 2));
 
   // 🔍 log full body
   console.log("BODY RECEIVED:", JSON.stringify(req.body, null, 2));
